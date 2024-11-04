@@ -329,6 +329,7 @@ def cerrar(request):
     return redirect('/')
 
 def subir_imagenes(request):
+    print("Subir imagenes")
     idUsuario=request.session['idusuario']
     if request.method == 'POST':
         imagenes = request.FILES.getlist('imagenes')
