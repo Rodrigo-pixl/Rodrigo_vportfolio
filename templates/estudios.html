@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{# {% load staticfiles %} #}
+{% load static %}
+
+{% block head %}
+ <br><br><br><br>
+  <center>
+  <font color="#686868" size="5" face="Comic Sans MS,Arial,Verdana">ESTUDIOS</font>
+   <br>
+  <img src="{% static 'images/chica1.jpg'%}" height='340' width='390'>
+  </center>
+
+ {% if not request.user.is_authenticated %}
+    <h2>ANONIMO</h2>
+ {% endif %}
+
+ {% if request.user.is_authenticated %}
+         <h2>ESTUDIOS OBTENIDOS</h2>
+ {% endif %}
+
+<font size="3">
+<table class="table table-bordered">
+	<thead>
+        <tr>
+			<th bgcolor="#F5DA81">ID</th>
+			<th bgcolor="#F5DA81">ESTUDIO</th>
+            <th bgcolor="#F5DA81">FECHA DE INICIO</th>
+             <th bgcolor="#F5DA81">FECHA DE FIN</th>
+             <th bgcolor="#F5DA81">NOTA MEDIA</th>
+             <th bgcolor="#F5DA81">LUGAR DE ESTUDIO</th>
+             <th bgcolor="#F5DA81">CIUDAD</th>
+             <th bgcolor="#F5DA81">PRECENCIA</th>
+             <th bgcolor="#F5DA81">OBSERVACIONES</th>
+			<th colspan="4" style="text-align:center;" bgcolor="#AAF5AA">OPERACIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in lista_estudios%}
+            <tr>
+				<td> {{ r.id }} </td>
+                <td> {{ r.titulacion|upper|slice:"0:12" }} </td>
+            <form action="" method="post">
+            {% csrf_token %}
+			<td><a class='btn btn-primary btn-sm' href="{% url 'home' %}">
+			VER</a></td>
+			<td><a class='btn btn-danger btn-sm'  href="{% url 'home' %}">ELIMINAR</a></td>
+			<td><a class='btn btn-success btn-sm' href="{% url 'home' %}">EDITAR</a></td>
+            </form>
+          </tr>
+        {% endfor %}
+		 </tbody>
+    </table>
+</font>
+
+{% if lista_estudios.has_other_pages %}
+<font size="4">
+  <ul class="pagination">
+    {% if lista_estudios.has_previous %}
+      <li><a href="?page={{ lista_estudios.previous_page_number }}">&laquo;</a></li>
+    {% else %}                    
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in lista_estudios.paginator.page_range %}
+      {% if lista_estudios.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if lista_estudios.has_next %}
+      <li><a href="?page={{ lista_estudios.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+</font>
+{% endif %}
+
+{% endblock content %}

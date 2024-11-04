@@ -1,0 +1,8 @@
+<br><br><br><br>
+<h1>Eliminar Habilidad</h1>
+<p>¿Estás seguro de que deseas eliminar la experiencia {{ habilidad.nivel }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-warning btn-sm">Eliminar</button>
+    <a href="{% url 'habilidad' %}" class="btn btn-warning btn-sm">Cancelar</a>
+</form>

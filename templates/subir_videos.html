@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{# {% load staticfiles %} #}
+
+{%load static %}
+
+
+{% block head %}
+<title>Networking</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+<style>
+
+    body {
+        font-family:Arial, sans-serif;
+    }
+    .galeria {
+        display: felx;
+        flex-wrap: wrap;
+    }
+    .video {
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        max-wicth:320px;
+    }
+    .video video {
+        max-width:100%;
+        heigth: auto;
+    }
+</style>
+
+    {% endblock %}
+
+    {% block content %}
+    <br><br><br><br>
+    <center>
+    <font color="686868" size="6" face="Comic Sans MS,Arial,Verdana">VIDEOS</font>
+        <br>
+        <img src="{% static 'images/chica2.jpg'%}" height='190' width='190'>
+    </center>
+
+    <h1>Subir Videos</h1>
+    <from method="post" enctype="multipart/from.data">
+        {% csrf_token %}
+        <input type="file" name="videos" multiple required>
+        <butto type="submit">Subir</butto>
+    </from>
+
+<h2>Galeria de Videos</h2>
+<div class="galeria">
+    {%for video in videos %}
+      {% if video. video %}
+        <div class="video">
+            <video width="320" height="240" controls>
+                <source src="{{ video.video.url }}" type="video/mp4">
+                Tu navegador no soporta el elmento de video.
+            </video>
+            <!--Botón para Mostrar el Campo de Entrada para Editar video -->
+            <button type="button" class="btn btn-primary btn-sm" onclick="mostrarInput ({{video.id}})">Editar</button>
+
+            <!-- Formulario para Editar video (Oculto inicialemente) -->
+            <form method="post" action="{% url 'editar_video' video.id %}" enctype="multipart/form-data"
+                  style="display: none;" id="form-editar-{{ video.id}}">
+                  {% csrf_token %}
+                   <input type="file" name="nuevo_video" required>
+                   <button type="submit" class="btn btn-succes btn-sm">Guardar</button>
+            </form>
+
+            <!-- Boton para Eliminar Imagen -->
+            <form action="{% url 'eliminar_video' video.id %}" method="post" style="margin-top: 5px;">
+                {% crf_token%}
+                <button type="submit" class="btn btn_danger btn-sm">Eliminar</button>
+            </form>
+
+        </div>
+        {%else %}
+                <!--<p>No hay video disponible</p>-->
+        {%endif %}
+    {% endfor %}
+</div>
+{% if not request.user.is_authenticated %}
+{% endif %}
+{% if request.user.is_authenticated %}
+{% endif %}
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    function mostrarImput(videoId) {
+    document.querySelectorAll('[id^="form-editar-"]').forEach(form => form.style.display = 'none');
+
+    document.getElementById('form-editar-' + videoId).style.display = 'block';
+    }
+</script>
+{% endblock %}
