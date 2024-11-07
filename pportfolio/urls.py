@@ -49,6 +49,7 @@ path('', views.home, name='home'),
     path('imagen/eliminar/<int:imagen_id>/', views.eliminar_imagen, name='eliminar_imagen'),
     path('video/editar/<int:video_id>/', views.editar_videos, name='editar_video'),
     path('video/eliminar/<int:video_id>', views.eliminar_video,name='eliminar_video'),
+    path('contacto/', views.contacto,name='contacto'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

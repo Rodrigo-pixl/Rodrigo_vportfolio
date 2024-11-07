@@ -162,3 +162,11 @@ TEMPLATE_LOADERS = (
 )
 TEMPLATE_DIRS = (
 )
+#correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gamil.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'rodrigoenviar12@gmail.com' # emisor
+EMAIL_HOST_PASSWORD = 'jvjp zxye kclk fpzu'
+EMAIL_USE_TLS = True #seguridad de gmail
+

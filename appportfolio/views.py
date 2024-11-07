@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from http.cookiejar import reach
 from lib2to3.fixes.fix_metaclass import find_metas
+from logging import fatal
 from multiprocessing.connection import Client
+from tempfile import template
 from time import process_time_ns
 
 from __future__ import unicode_literals
@@ -33,6 +35,12 @@ from django.views.decorators.csrf import csrf_protect
 
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
+#email
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.contrib import messages
 
 def home (request):
     global DEBUG
@@ -388,4 +396,22 @@ def editar_videos(request, video_id):
         video.save()
         return  redirect('subir-videos')
     return redirect('subir_videos')
+
+def contacto(request):
+    if request.method =="POST":
+        nombre= request.POST.get('nombre')
+        email= request.POST.get ("email")
+        asunto= request.POST.get("asunto")
+        mensaje= request.POST.get("mensaje")
+
+        context={'nombre': nombre,'email': email,'asunto': asunto, 'mensaje': mensaje}
+        template = render_to_string('email_template.html', context = context)
+
+        email=EmailMessage(asunto, template, settings.EMAIL_HOST_USER, ['rodrigoenviar12@gmail.com'])
+        email.fail_silenty=False #que no marque error en gmail.
+        email.send()
+
+        messages.success(request,'Se ha enviado tu email')
+        return redirect('home')
+    return render(request, 'correo.html')
 
