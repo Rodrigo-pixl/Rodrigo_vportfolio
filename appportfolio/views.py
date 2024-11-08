@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from http.client import responses
 from http.cookiejar import reach
 from lib2to3.fixes.fix_metaclass import find_metas
 from logging import fatal
@@ -41,6 +42,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib import messages
+#pfd's
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 def home (request):
     global DEBUG
@@ -415,3 +419,45 @@ def contacto(request):
         return redirect('home')
     return render(request, 'correo.html')
 
+#Parte de Listar_Entrevistadores para generar PDF
+def listar_entrevistadores(request):
+    entrevistadores= Entrevistador.objects.all()
+    return render(request, 'listar_entrevistadores.html', {'entrevistadores': entrevistadores})
+
+def generar_pdf(request, entrevistador_id):
+    entrevistador = Entrevistador.objects.get(id=entrevistador_id)
+
+    #Crear una repuesta HTTP con contenido tipo PDF
+    response= HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename= "entrevistador_{entrevistador.id}.pdf"'
+
+    #Crear el objeto canvas de ReportLab
+    p=canvas.Canvas(response,pagesize=letter)
+
+    #Configuración del título
+    p.setFont("Helvetica_Bold", 16)
+    p.setFillColor(color.darkblue)
+    p.drawCentredString(300, 770, "Reporte de Entrevistador")
+
+    #Volver al tamaño de fuente normal
+    p.setFont("Helvetica", 12)
+    p.setFillColor(colors.black)
+
+    # Datos del entrevistador
+    p.drawString(100, 720, f"ID: {entrevistador.id}")
+    p.drawString(100, 700, f"Empresa: {entrevistador.empresa or 'N/A'}")
+    p.drawString(100, 680, f"Fecha de Entrevista: {entrevistador.fecha_entrevista or 'N/A'}")
+    p.drawString(100, 660, f"Conectado: {'Si' if entrevistador.conectado else 'No'}")
+    p.drawString(100, 640, f"Seleccionado: {'Si' if entrevistador.seleccionado else 'NO'}")
+    p.drawString(100, 620, f"Usuario: {entrevistador.user.username if entrevistador.user else 'N/A'}")
+
+    # Añadir avatar si existe
+    if entrevistador.avatar:
+        avatar_path = entrevistador.avatar.path
+        p.drawImage(avatar_path,100, 500, width=100, height=100)
+
+    # Guardar el PDF
+    p.showPage()
+    p.save()
+
+    return response
