@@ -41,7 +41,6 @@ class NoticiaModelTest(TestCase):
         Prueba que una noticia se puede crear una imagen cargada.
         """
         unique_filename = f'test_image_{uuid4().hex}-jpg'
-        #unique_filename = "prueba.jpg"
         image_data = SimpleUploadedFile(
             name=unique_filename,
             content=b'algun contenido de la imagen',
