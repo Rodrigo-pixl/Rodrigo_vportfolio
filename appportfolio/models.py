@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from doctest import master
+from idlelib.debugger_r import close_subprocess_debugger
+from math import trunc
 from tkinter.ttk import Treeview
 
+from appportfolio.views import estudios
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -144,3 +148,101 @@ class Video (models.Model):
         ordering = ['id']
     def __str__(self):
         return "%s,%s,%s" % (self.id, self.video, self.comentario)
+
+class Curriculum (models.Model):
+    id = models.AutoField(primary_key = True)
+    nombre = models.CharField("Nombre", max_length=25, null=True, blank=True)
+    apellido1 = models.CharField("Primer apellido", max_length=25, null=True, blank=True)
+    apellido2 = models.CharField("Segundo apellido", max_length=25, null=True, blank=True)
+    email = models.CharField("Email", max_length=30, null= True, blank=True)
+    telefono = models.CharField("Telefono", max_length=9 , null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Curriculum"
+        verbose_name_plural = "Curriculums"
+        ordering = ['nombre']
+
+    def __str__(self):
+        return '%s,%s,%s,%s' % (self.id, self.nombre, self.apellido1, self.apellido2)
+
+class DeatteCurriculumEstudio(models.Model):
+    id = models.AutoField(primary_key=True)
+    Estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE, verbose_name="Estudio")
+    Curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, verbose_name="Curriculum")
+
+    class Meta:
+        verbose_name = "Detalle de Curriculum y Estudio"
+        verbose_name_plural = "Detalles de Curriculums y Estudios"
+
+    def __str__(self):
+        return  '%s,%s,%s' % (self.id, self.Curriculum, self.Estudio)
+
+
+class DeatteCurriculumExperiencia(models.Model):
+    id = models.AutoField(primary_key=True)
+    Experiencia = models.ForeignKey(Estudio, on_delete=models.CASCADE, verbose_name="Estudio")
+    Curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, verbose_name="Curriculum")
+
+    class Meta:
+        verbose_name = "Detalle de Curriculum y Experiencia"
+        verbose_name_plural = "Detalles de Curriculums y Experiencias"
+
+    def __str__(self):
+        return  '%s,%s,%s' % (self.id, self.Curriculum, self.Experiencia)
+
+class DetalleCurriculumEstudio(models.Model):
+    id = models.AutoField(primary_key=True)
+    Estudio = models.ForeignKey(Estudio,on_delete=models.CASCADE, verbose_name="Estudio")
+    Curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, verbose_name="Curriculum")
+
+    class Meta:
+        verbose_name = "Detalle de Curriculum y Estudio"
+        verbose_name_plural = "Detalles de Curriculums y Estudios"
+
+    def __str__(self):
+        return '%s, Estudio: %s, Curriculum: %s' % (self.id, self,estudios,self.Curriculum)
+
+class Estudio(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+
+    def __str__(self):
+        return self.nombre
+
+
+class Curroculum(models.Model):
+    id = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    ap1 = models.CharField(max_length=100)
+    ap2 = models.CharField(max_length=100)
+    email = models.EmailField()
+    telefono = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.nombre} {self.ap1} {self.ap2}"
+
+class DetalleCurriculumExperiencia(models.Model):
+    id = models.AutoField(primary_key=True)
+    experiencia = models.ForeignKey(Experiencia, on_delete=models.CASCADE)
+    Curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.experiencia.empresa} para {self.curriculum.nombre}"
+
+class DetalleCurriculumEstudio(models.Model):
+    id = models.AutoField(primary_key=True)
+    estudio = models.ForeignKey(Estudio, on_delete=models.CASCADE)
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.estudio.nombre} para {self.curriculum.nombre}"
+
+
+class Noticia (models.Model):
+    id = models.AutoField(primary_key=True)
+    titulo = models.CharField("Titulo", max_length=200, null=True, blank=True)
+    contenido = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    imagen = models.ImageField('Imagen', blank=True, null=True, upload_to="media/")
+
+    def __str__(self):
+        return self.titulo

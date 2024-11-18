@@ -20,12 +20,12 @@
                     <li><a href="{% url 'sobremi' %}"><font size="5" color="#0000FF">Sobre Mi</font></a></li>
                     <li><a href="{% url 'habilidades' %}"><font size="5" color="#0000FF">Habilidades</font></a></li>
 				    <li><a href="{% url 'habilidades' %}"><font size="5" color="#0000FF">Empresa</font></a></li>
+					<li><a href="{% url 'agregar_curriculum' %}"><font size="5" color="#0000FF">Curriculum</font> </a>  </li>
                     <li><a href="{% url 'categorias' %}"><font size="5" color="#0000FF">Categoria</font></a></li>
-                    <li><a href="{% url 'experiencias' %}"><font size="5" color="#0000FF">Experiencias</font> </a> </li>
-               		<a class="btn-sucsses" href="(% url 'register' %)" style="margin_top: 7px;" >
-
-					   <font size="5" color="#686868" >Registro</font>
-					</a>
+                    <li><a href="{% url ,crear_noticia' %}"><font size="5"color="#0000FF">Crear Noticia</font> </a> </li>
+					<li><a href="{% url ,lista_noticias' %}"><font size="5" color="#0000FF">Listar Noticias</font></a></li>
+					<li><a href="{% url 'experiencias' %}"><font size="5" color="#0000FF">Experiencias</font> </a> </li>
+               		<a class="btn-sucsses" href="(% url 'register' %)" style="margin_top: 7px;" ><font size="5" color="#686868" >Registro</font></a>
                 {% endif %}
 				<!-- bloque 2 usuarios autorizados -->
 				{% if request.user.is_authenticated %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<title>Alta Curriculum</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+        integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+      integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+      crossorigin="anonymous">
+
+<style>
+    .container {
+        margin-top: 20px;
+    }
+    .curriculum-header {
+        margin-bottom: 15px;
+    }
+    .curriculum-details {
+        font-size: 1.1em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row curriculum-header">
+        <div class="col-md-12">
+            <h2>Detalles del Curriculum</h2>
+        </div>
+    </div>
+    <div class="row curriculum-details">
+        <div class="col-md-6">
+            <p><strong>ID:</strong> {{ curriculum.id }}</p>
+            <p><strong>Nombre:</strong> {{ curriculum.nombre }}</p>
+            <p><strong>Primer Apellido:</strong> {{ curriculum.apellido1 }}</p>
+            <p><strong>Segundo Apellido:</strong> {{ curriculum.apellido2 }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Email:</strong> {{ curriculum.email }}</p>
+            <p><strong>Teléfono:</strong> {{ curriculum.telefono }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% url 'detallecurriculumexperiencia_create' curriculum.id %}" class="btn btn-primary">Agregar Experiencia</a>
+            <a href="{% url 'detallecurriculumestudios_create' curriculum.id %}" class="btn btn-primary">Agregar Estudios</a>
+            <a href="{% url 'detallecurriculumestudios_list' %}" class="btn btn-secondary">Ver Todos los Detalles</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

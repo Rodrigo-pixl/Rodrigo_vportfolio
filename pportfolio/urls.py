@@ -54,7 +54,14 @@ path('', views.home, name='home'),
     path('generar_pdf/<int:entrevistador_id>/', views.generar_pdf, name = 'generar_pdf'),
     #Listar_Entrevistadores
     path('listar_entrevistadores/', views.listar_entrevistadores,name = 'listar_entreviatadores'),
-
+    #CURRICULUM
+    path('agregar_curriculum/', views.agregar_Curriculum, name='agregar_Curriculum'),
+    path('curriculum/<int:id>/', views.detalle_curriculum, name='detalle_curriculum'),
+    path('agregar/', views.agregar_curriculum,name='agregar_curriculum'),
+    path('ver/<int:pk>/', views.ver_Curriculum ,name='ver_curriculum'),
+    path ('generar-pdf/<int:pk>/', views.generar_pdf, name = 'generar_pdf'),
+    path ('lista_noticias/' , views.lista_noticias, name='lista_noticias'),
+    path ('crear_noticia/' , views.crear_noticia, name='crear_noticia'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

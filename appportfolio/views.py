@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import ctypes.wintypes
 from http.client import responses
 from http.cookiejar import reach
 from lib2to3.fixes.fix_metaclass import find_metas
-from logging import fatal
+from logging import fatal, currentframe
 from multiprocessing.connection import Client
 from tempfile import template
 from time import process_time_ns
@@ -45,6 +46,22 @@ from django.contrib import messages
 #pfd's
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+#CURRUCULUM
+# Estudios
+from .models import DetalleCurriculumEstudios, Curriculum, Estudios
+#Experiencia
+from .models import DetalleCurriculumExperiencia,Curriculum,Experiencia
+
+# curriculum con reportlab
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from reportlab.lib import  colors
+from reportlab.lib.utils import ImageReader
+import os
+
+
+
 
 def home (request):
     global DEBUG
@@ -461,3 +478,169 @@ def generar_pdf(request, entrevistador_id):
     p.save()
 
     return response
+
+#CURRICULUM
+def crear_detalle(request):
+    estudio_id = request.GET.get('estudio_id')
+    curriculum_id = request.GET.get('curriculum_id')
+
+    # Verifica si los parámetros están presentes y válidos
+    if estudio_id and curriculum_id:
+        try:
+            estudio = Estudios.objects.get(id=estudio_id)
+            curriculum = Curriculum.objects.get(id=curriculum_id)
+            # Crea el detalle
+            DetalleCurriculumEstudios.objects.create(estudio=estudio, curriculum=curriculum)
+            return redirect('detallecurriculumestudios_list')
+        except Estudios.DoesNotExist:
+            # Maneja el caso en que el ID de estudio no existe
+            return render(request, 'error.html', {'error': 'El estudio especificado no existe.'})
+        except Curriculum.DoesNotExist:
+            # Maneja el caso en que el ID de curriculum no existe
+            return render(request, 'error.html', {'error': 'El curriculum especificado no existe.'})
+
+    return render(request, 'detallecurriculumestudios_form.html')
+
+def detalle_detallecurriculumestudios(request):
+    detalle_id = request.GET.get('id')
+    detalle = get_object_or_404(DetalleCurriculumEstudios, id=detalle_id)
+    return render(request, 'detallecurriculumestudios_detail.html', {'detalle': detalle})
+
+# PARTE DEL CURRICULUM HECHO POR EL PROFESOR
+def agregar_Curriculum(request):
+        if request.method == "POST":
+            # Obtiene el objeto 'Personal' con id=1 (modifica este criterio según tu lógica)
+            try:
+                P = Personal.objects.get(id=1)
+            except Personal.DoesNotExist:
+                return render(request, 'error.html', {'error': 'El registro de Personal no existe'})
+
+            # Asigna los valores de Personal al nuevo Curriculum
+            nombre = P.nombre
+            ap1 = P.apellido1
+            ap2 = P.apellido2
+            email = request.POST.get("email")
+            telefono = request.POST.get("telefono")
+
+            # Crea y guarda el nuevo Curriculum
+            c = Curriculum()
+            c.nombre = nombre
+            c.apellido1 = ap1
+            c.apellido2 = ap2
+            c.email = email
+            c.telefono = telefono
+            c.save()
+
+            # Redirige después de guardar el Curriculum
+            return redirect('agregar_Curriculum')
+
+        # Renderiza el formulario si el método es GET
+        return render(request, 'alta_Curriculum.html')
+
+def agregar_curriculum(request):
+    if request.method== 'POST':
+        nombre  = request.POST.get ('nombre')
+        ap1 = request.POST.get('ap1')
+        ap2 = request.POST.get('ap2')
+        email= request.POST.get('ap1')
+        telefono = request.POST.get('telefono')
+
+        curriculum = Curriculum(nombre = nombre,ap1=ap1, ap2=ap2, email = email, telefono = telefono)
+        curriculum.save()
+        return redirect('ver_curriculum', pk=curriculum.pk)
+
+    return rende (request, 'agregar_curriculum.html')
+
+def ver_Curriculum(request, pk):
+    curriculum = get_object_or_404(Curriculum, pk=k)
+    estudios = DetalleCurriculumEstudio.objects.fitrer (curriculum=curriculum)
+    experiencia = DetalleCurriculumExperiencia.objects.filter(curriculum= curriculum)
+    context={'curriculum': curriculum, 'estudios': estudios, 'experiencias': experiencia,}
+
+    return render(request, 'ver_curriculum.html', context=context)
+
+#Controlador que genera el pdf
+def generar_pdf(request, pk):
+    curriculum = get_object_or_404(Curriculum, pk=pk)
+    estudios = DetalleCurriculumEstudio.objects.fitrer(curriculum=curriculum)
+    experiencia = DetalleCurriculumExperiencia.objects.filter(curriculum=curriculum)
+
+    # Crear la representa HttpResponse con tipo de contenido PDF
+    responses = HttpResponse(content_type = 'application/pdf')
+    responses ['Content-Dispositio'] = f'attachment; filename="curriculum_{curriculum.nombre}_{curriculum.apellido1}.pdf"'
+
+    #Crear un objeto canvas de ReportLab para generar el PDF
+    c=canvas.Canvas(responses, pagesize=letter)
+    width, height = letter # Tamaño de la pagina
+
+    #Cargar imagen de avatar
+
+    try:
+        #avatar_path = "C:/vportfolio/pportfolio/media/MEDIA/moneda3.jpg"
+        avatar_path = os.path.join(settings.MEDIA_ROOT, "MEDIA/moneda3.jpg")
+        avatar = ImageReader(avatar_path)
+        c.drawImage(avatar, width - 150, height -150, width=100, height=100)
+    except Exception as e:
+        print((f"No se pudo cargar la imagen: {e}"))
+        pass #Si no se encuentra la imagen, el PDF se generará sin ella
+# Titulo del curriculum en color
+c.setFont("Helvetica-Bold", 20)
+c.setFillColor(colors.HexColor("#4B8BBE")) #Cambia a cualquier color hex que prefieras
+c.drawString(100, height - 100, f"Curriculum de {curriculum.nombre} {curriculum.apellido1}")
+
+# Informacion de contacto en color diferentr
+c.setFont("Helvetica", 12)
+csetFillcolor(colors.HexColor("#306998")) # otro color para variar
+c.drawString(100, height - 130, f"Email: {curriculum.email}")
+c.drawString(100, height - 150, f"Telefono: {curriculum.telefono}")
+
+# Seccion de estudios en otro color
+y_positon = height -200
+c.setFont("Helvetica-Bold", 14)
+c.setFillColor(colors.HexColor("#FFD43B"))
+c.drawString(100, y_position, "Estudios:")
+
+#Mostrar cada estudio con detalles
+c.setFont("Helvetica", 12)
+y_positon -=20
+for estudio in estudios:
+    c.setFillColor(colors.black)
+    c.drawString (100, y_positon, f"{estudio.titulacion} en {estudio.institucion} ({estudio.fechaInicio} - {estudio.fechaFin})")
+    y_positon -=20
+
+# Seccion de experiencia laboral
+y_positon -=40
+c.setFont("Helvetica-Bold", 14)
+c.setFillColor(colors.HexColor("#306998"))
+c.drawString(100, y_positon, "Experiencia laboral:")
+y_positon -=20
+c.setFont("Helvetica",12)
+for experiencia in experiencias:
+    c.setFillColor(colors.black)
+    c.drawString(100, y_positon,f"{experiencia.puesto} en {experiencia.empresa} ({experiencia.fechaInicio} - {experiencia.fechaFin})")
+    y_positon -=20
+
+# Finalizar el PDF
+c.showPage() #si tienes mas paginas
+c.save()
+#return response
+
+
+# Vista para ver las noticias
+def lista_noticias(request):
+    noticias = Noticia.objects.all().order_by('-fecha_creacion')
+    return  render (request, 'lista_noticias.html' , {'noticias' : noticias})
+# Vista para crear una nueva noticias
+def crear_noticia(request):
+        if request.method == 'POST':
+            titulo = request.POST.get('titulo')
+            contenido = request.POST.get('contenido')
+            imagen = request.FILES.get('imagen')
+
+            if titulo and contenido:
+                noticia = Noticia.objects.create(titulo=titulo, contenido=contenido, imagen=imagen)
+                return redirect('listar_noticias')
+            else:
+                return HttpResponse("Error: El titulo y el contenido son obligatorios.", status=400)
+
+            return render(request, 'crear_noticia.html')
