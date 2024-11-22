@@ -60,8 +60,39 @@ from reportlab.lib import  colors
 from reportlab.lib.utils import ImageReader
 import os
 
+from __future__ import unicode_literals
+from django.shortcuts import render, redirect, get_object_or_404
 
+from django.http import HttpResponse
+from appportfolio.models import *
+# from .models import *
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger #paginacion
+from django.contrib.auth import authenticate, get_user_model
+login,logout #todas son por defecto
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login, logout as auth_logout
+from django.views.decorators.csrf import csrf_protect
+
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
+#email
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.contrib import messages
+
+#curriculum con reportlab
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+import os
+
+#para el chat
+from django.http import  JsonResponse
 
 def home (request):
     global DEBUG
@@ -644,3 +675,75 @@ def crear_noticia(request):
                 return HttpResponse("Error: El titulo y el contenido son obligatorios.", status=400)
 
             return render(request, 'crear_noticia.html')
+
+#VALORACIONES
+def listar_Valoraciones(request):
+    valoraciones = Valoracion.objects.all()
+    return render(request, 'list.html', {'valoraciones': valoraciones})
+def actualizar_valoracion(request, pk):
+    valoracion = get_object_or_404(Valoracion, pk=pk)
+    if request.method == 'POST':
+        votos_entrevista = int(request.POST.get('votos_entrevista', valoracion.votos_entrevista))
+        votos_empresa = int(request.POST.get('votos_empresa', valoracion.votos_empresa))
+
+        # Actualizar los votos y recalcular la media
+        valoracion.votos_entrevista = votos_entrevista
+        valoracion.votos_empresa = votos_empresa
+        valoracion.media_aspectos = (votos_entrevista + votos_empresa) /2
+        valoracion.save()
+
+        return redirect('listar_valoraciones')
+
+    return render(request, 'update.html', {'valoracion': valoracion})
+
+def añadir_valoracion(request):
+    if request.method == 'POST':
+        entrevista = request.POST.get('entrevista')
+        empresa = request.POST.get('empresa')
+        votos_entrevista = int (request.POST.get('votos_entrevista', 0))
+        votos_empresa = int(request.POST.get('votos_empresa', 0))
+
+        # Calcular la media de los aspectos
+        media_aspectos = (votos_entrevista + votos_empresa) /2
+        #Crear y guardar la nueva valoración
+        nueva_valoracion = Valoracion.objects.create(
+            entrevista=entrevista,
+            votos_entrevista=votos_entrevista,
+            votos_empresa=votos_empresa,
+            media_aspectos= media_aspectos
+        )
+        return redirect('listar_valoraciones')
+    return render(request, 'add.html')
+
+@login_required
+def chat_view(request, entrevistador_id):
+    entrevistador = get_object_or_404(Entrevistador, id=entrevistador_id)
+    mensajes = Mensaje.objects.filter(
+        (models.Q(remitente=request.user) & models.Q(destinatario= entrevistador.user)) |
+        (models.Q(remitente=entrevistador.user) & models.Q(destinatario=request.user))
+    )
+    # Agregar la propiedad 'clase' para usarla en el template
+    for mensaje in mensajes:
+        mensaje.clase = 'enviado' if mensaje.remitente == request.user else 'recibido'
+
+    # Renderizar solo el chat para la respuesta AJAX
+    if request.headers.get('X_Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'mensajesHtml': render_to_string('chat_mensajes.html', {'mensajes': mensajes}),
+        })
+    return render(request, 'chat.html', {'entrevistador': entrevistador, 'mensajes':mensajes})
+@login_required
+def enviar_mensaje(request):
+    if request.method == 'POST':
+        contenido = request.POST.get('contenido')
+        destinatario_id = request.POST.get('destinatario_id')
+        destinatario = get_object_or_404(User, id=destinatario_id)
+
+        mensaje = Mensaje.objects.create(
+            remitente= request.user,
+            destinatario = destinatario,
+            contenido=contenido
+        )
+        return JsonResponse({'status': 'success', 'mensaje': mensaje.contenido,
+                             'fecha_envio': mensaje.fecha_envio})
+    return JsonResponse({'status': 'error', 'message' : 'Método no permitido'})

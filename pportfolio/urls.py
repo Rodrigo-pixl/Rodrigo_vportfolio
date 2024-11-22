@@ -62,6 +62,13 @@ path('', views.home, name='home'),
     path ('generar-pdf/<int:pk>/', views.generar_pdf, name = 'generar_pdf'),
     path ('lista_noticias/' , views.lista_noticias, name='lista_noticias'),
     path ('crear_noticia/' , views.crear_noticia, name='crear_noticia'),
+    #Valoraciones
+    path('listar_valoraciones/', views.listar_Valoraciones,name='listar_valoraciones'),
+    path('actualizar_valoracion/<int.pk>/edit/', views.actualizar_valoracion, name='actualizar_valoracion'),
+    path('añadir_valoracion/add/', añadir_valoracion, name='añadir_valoracion'),
+    # CHAT ENTREVISTADOR
+    path('chat_view/<int:entrevistador_id>/', views.chat_view, name='chat_view'),
+    path('chat/enviar/', views.enviar_mesaje, name='enviar_mensajes'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

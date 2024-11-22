@@ -1,0 +1,34 @@
+{% block content %}
+<br><br><br><br>
+<div class="container mt-4">
+    <h1> Lista de Valoraciones</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Entrevista</th>
+            <th>Empresa</th>
+            <th>votos Entrevista</th>
+            <th>votos Empresa</th>
+            <th>Media</th>
+            <th>Editar</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for valoracion in valoraciones %}
+        <tr>
+            <td>{{valoracion.id}}</td>
+            <td>{{valoracion.entrevista }}</td>
+            <td>{{valoracion.empresa}}</td>
+            <td>{{valoracion.votos_entrevista}}</td>
+            <td>{{valoracion.votos_empresa}}</td>
+            <td>{{valoracion.media_aspectos }}</td>
+            <td><a href="{% url 'actualizar_valoracion' valoracion.id %}">Editar</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% enblock content %}

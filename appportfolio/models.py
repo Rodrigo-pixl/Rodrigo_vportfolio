@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 # Habilidades
 ################################################
 
+from django.utils import timezone
+
 class Habilidad(models.Model):
     id = models.AutoField(primary_key=True)
     habilidad = models.CharField("Habilidad",max_length=25, null=True, blank=True)
@@ -246,3 +248,29 @@ class Noticia (models.Model):
 
     def __str__(self):
         return self.titulo
+
+
+class Valoracion(models.Model):
+    id= models.AutoField(primary_key=True)
+    votos_entrevista = models.DecimalField("VotosEntrevista", max_digits=3, decimal_places=1, null=True,blank=True)
+    votos_empresa = models.DecimalField("Votos Empresa", max_digits=3,decimal_places=1, null=True, blank=True)
+    votos_aspectos = models.DecimalField("Media Aspectos", max_digits=3, decimal_places=1, null=True, blank=True)
+    entrevista = models.CharField('Descripción Entrevista', max_length=200, null=True, blank=True)
+    empresa = models.CharField('Descripción Empresa', max_length=200, null=True, blank=True)
+    numvaloraciones = models.IntegerField('Num Valoraciones', null=True, blank=True)
+    timestamp=models.DateTimeField("Fecha", default=timezone.now)
+
+    def __str__(self):
+        return f"{self.id}, {self.votos_entrevista}, {self.votos_empresa}, {self.votos_aspectos}, {self.entrevista}, {self.timestamp}"
+class Mensaje(models.Model):
+    remitente = models.ForeignKey(User, related_name='mensajes_enviados', on_delete=models.CASCADE)
+    destinatario = models.ForeignKey(User, related_name='mensajes_recibidos', on_delete=models.CASCADE)
+    contenido = models.TextField('Contenido del mensaje')
+    fecha_envio = models.DateTimeField('Fecha de envio', auto_now_add=True)
+    listo = models.BooleanField('Leido', default=False)
+
+    class Meta:
+        ordering = ['fecha_envio']
+
+    def __str__(self):
+        return f"De: {self.remitente.username} Para: {self.destinatario.username} - {self.contenido[:30]}"
