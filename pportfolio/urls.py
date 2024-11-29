@@ -69,6 +69,12 @@ path('', views.home, name='home'),
     # CHAT ENTREVISTADOR
     path('chat_view/<int:entrevistador_id>/', views.chat_view, name='chat_view'),
     path('chat/enviar/', views.enviar_mesaje, name='enviar_mensajes'),
+
+    # Tareas
+    path('listar_tareas/', views.listar_tareas(), name='listar_tareas'),
+    path('crear_tarea/', views.crear_tarea, name= 'crear_tarea'),
+    path('editar_tarea/', views.editar_tarea, name='editar_tarea'),
+    path('eliminiar_tarea/', views.eliminar_tarea, name= 'eliminar_tarea')
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
