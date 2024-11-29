@@ -10,6 +10,9 @@ from time import process_time_ns
 
 from __future__ import unicode_literals
 
+from django.shortcuts import render
+from django.http import HttpResponse
+
 from lib2to3.fixes.fix_input import context
 from pydoc import pager
 
@@ -95,7 +98,6 @@ import os
 from django.http import  JsonResponse
 #para la clase tareas
 from .models import Tarea
-
 
 def home (request):
     global DEBUG
@@ -790,3 +792,14 @@ def eliminar_tarea(request, id):
         return redirect('listar_tareas')
     return render(request, 'tareas/eliminar_tarea.html', {'tarea': tarea})
 
+# Noticia
+def crear_noticia1(request):
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_noticias')
+    else:
+        form = NoticiaForm()
+
+    return render(request, 'crear_noticia1.html', {'form': form})

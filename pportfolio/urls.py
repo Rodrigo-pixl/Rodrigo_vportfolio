@@ -74,7 +74,10 @@ path('', views.home, name='home'),
     path('listar_tareas/', views.listar_tareas(), name='listar_tareas'),
     path('crear_tarea/', views.crear_tarea, name= 'crear_tarea'),
     path('editar_tarea/', views.editar_tarea, name='editar_tarea'),
-    path('eliminiar_tarea/', views.eliminar_tarea, name= 'eliminar_tarea')
+    path('eliminiar_tarea/', views.eliminar_tarea, name= 'eliminar_tarea'),
+    #Noticia
+    path('crear_noticia1/', views.crear_noticia1, name='crear_noticia1')
+
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

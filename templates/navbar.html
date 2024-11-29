@@ -40,7 +40,8 @@
 					<li><a href="{% url 'subir_imagenes' %}"><front size="5" color="#0000FF">Diplomas</front></a></li>
 					<li><a href="{% url 'subir_videos' %}"><front size="5" color="#0000FF">Videos</front></a></li>
 					<li><a href="{% url 'contacto' %}"><font size="5" color="#0000FF">Enviar email</font></a></li>
-					<li><a href="{% url 'listar_entrevistadores' %}"><font size="5" color="=#000FF">Entrevistadores</font></a></li>
+					<li><a href="{% url 'listar_entrevistadores' %}"><font size="5" color="=#0000FF">Entrevistadores</font></a></li>
+					<li><a href="{% url 'seleccionar_entrevistadores' %}"><font size="5" color="#0000FF">Entrevistadores Chat</font> </a> </li>
 					<li><a>href="{% url 'cerrar' %}"><font size="5" color="#0000FF"> Cerrar Sesión</font></a></li>
 				{% endif %}
             </ul>
@@ -62,6 +63,9 @@
 			{% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path %}
 			<form class='navbar-form navbar-right' method='POST' action='{% url "habilidades" %}'>
 			{% csrf_token %} <!-- control anti-hacker para formularios-->
+				<a href='{% url "login" %}' class="btn btn-primary"
+				   style="color: #686868!important; background-color: #2E9AFE; font-size: 22px; padding: 10px 20px; text-decoration: none;">Entrar</a>
+
 			<div class='form-group'>
 			   <input type='text' class='form-control' name='username' placeholder='nombre del usuario'/>
 			</div>
