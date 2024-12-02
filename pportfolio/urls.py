@@ -35,7 +35,7 @@ path('', views.home, name='home'),
     re_path(r'^(?P<id>\d+)/ver_experiencia$',
     views.ver_experiencia,name='ver_experiencia'),
 
-    re_path ('eliminarExperiencia/<int:pk>/',views.eliminarExperiencia, name='eliminarExperiencia'),
+    path ('eliminarExperiencia/<int:pk>/',views.eliminarExperiencia, name='eliminarExperiencia'),
 
     path('persona/nueva/', views.crear_Persona, name='crear_persona'),
     path('persona/editar/<int:persona_id>/', views.editar_persona, name='editar_persona'),

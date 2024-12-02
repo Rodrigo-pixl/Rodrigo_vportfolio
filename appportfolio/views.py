@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import ctypes.wintypes
 from http.client import responses
 from http.cookiejar import reach
@@ -8,7 +9,7 @@ from multiprocessing.connection import Client
 from tempfile import template
 from time import process_time_ns
 
-from __future__ import unicode_literals
+
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -63,7 +64,7 @@ from reportlab.lib import  colors
 from reportlab.lib.utils import ImageReader
 import os
 
-from __future__ import unicode_literals
+
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.http import HttpResponse
@@ -141,7 +142,7 @@ def home (request):
 
     if str(actual)=="AnonymousUser":
         request.session ['tipousurio']= 'anonimo'
-        print("IP ANONIMO ....+ str"(ip))
+        print("IP ANONIMO ...."+ str(ip))
     usuario='prueba'
     context = {'usuario':usuario}
     return render(request,'home.html', context=context)
@@ -685,6 +686,7 @@ def crear_noticia(request):
 def listar_Valoraciones(request):
     valoraciones = Valoracion.objects.all()
     return render(request, 'list.html', {'valoraciones': valoraciones})
+
 def actualizar_valoracion(request, pk):
     valoracion = get_object_or_404(Valoracion, pk=pk)
     if request.method == 'POST':

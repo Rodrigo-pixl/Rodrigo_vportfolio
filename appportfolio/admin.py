@@ -5,7 +5,7 @@ from django.contrib import admin
 from appportfolio.models import *
 from django.contrib.auth.models import User
 from __future__ import unicode_literals
-
+from .models import Estudio, Categoria, Personal, Habilidad, Imagen, Video, Entrevistador, Noticia, Valoracion, Experiencia
 from .models import DetalleCurriculumEstudio,DetalleCurriculumExperiencia,Curriculum
 
 admin.site.site_header = "Sitio web Salmantino"  #este es el título
@@ -32,7 +32,7 @@ admin.site.register(Personal, PersonalAdmin)
 class CategoriaAdmin(admin.ModelAdmin):
     #list_display = [c.name for c in categoria._meta.get_fields()]
     list_display = ['id','nombre_categoria']
-    search_fields = ('id','nombre_cateforia')
+    search_fields = ('id','nombre_categoria')
     list_filter = ('id', 'nombre_categoria')
 admin.site.register(Categoria, CategoriaAdmin)
 

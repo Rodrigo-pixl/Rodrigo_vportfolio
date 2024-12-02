@@ -81,10 +81,10 @@ class Estudio(models.Model):
 
 class Experiencia(models.Model):
     id= models.AutoField(primary_key=True)
-    empresa= models.CharField("Empresa", max_length=25, null=True, blank=True)
-    fechaInicio= models.CharField("Fecha Inicio", max_length=25, null=True, blank=True)
-    fechaFin= models.CharField("Fecha Fin", max_length=25, null=True, blank=True)
-    observaciones= models.TextField( null=True, blank=True)
+    empresa= models.CharField('Empresa', max_length=25, null=True, blank=True)
+    fechaInicio= models.CharField('Fecha Inicio', max_length=25, null=True, blank=True)
+    fechaFin= models.CharField('Fecha Finalización', max_length=25, null=True, blank=True)
+    observaciones= models.TextField( 'Funciones',max_length=25, null=True, blank=True)
     categoria=models.ForeignKey(Categoria, related_name='expe_categorias' ,on_delete=models.PROTECT)
     class Meta:
         verbose_name = "Experiencia"
@@ -92,7 +92,7 @@ class Experiencia(models.Model):
         ordering = ['empresa']
 
     def __str__(self):
-        return '%s,%s,%s,%s,%s,%s' % (self.id,self.empresa,self.fechaInicio,self.fechaFin,self.observaciones,self.categoria)
+        return "%s,%s,%s,%s,%s,%s % (self.id,self.empresa,self.fechaInicio,self.fechaFin,self.observaciones,self.categoria)"
 
 class Persona(models.Model):
     nombre = models.CharField(max_length=100)
