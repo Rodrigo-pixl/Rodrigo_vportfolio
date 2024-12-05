@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listado de Notas</title>
+</head>
+<body>
+    <h1>Listado de Notas</h1>
+
+    <!-- Mostrar la media de las notas, o "N/A" si no hay media -->
+    <p><strong>Media de las notas:</strong> {{ media|default:"N/A" }}</p>
+
+    <!-- Listado de todas las notas -->
+    <ul>
+        {% for nota in notas %}
+            <li>{{ nota.asignatura }} - Nota: {{ nota.nota }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Enlace para añadir una nueva nota -->
+    <a href="{% url 'añadir_nota' %}">Añadir Nueva Nota</a>
+</body>
+</html>

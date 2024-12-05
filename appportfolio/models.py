@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from doctest import master
 from idlelib.debugger_r import close_subprocess_debugger
 from math import trunc
+from pickletools import decimalnl_long
 from tkinter.ttk import Treeview
 
 from appportfolio.views import estudios
@@ -29,7 +30,8 @@ class Habilidad(models.Model):
         ordering = ['habilidad']
 
     def __str__(self):
-        return '%s,%s' % (self.habilidad, self.nivel)
+        return f"{self.habilidad}, Nivel: {self.nivel}"
+#return '%s,%s' % (self.habilidad, self.nivel)
  
 class Personal (models.Model):
     id = models.AutoField(primary_key=True)
@@ -43,7 +45,8 @@ class Personal (models.Model):
         verbose_name_plural = "Personales"
         ordering = ['nombre']
     def __str__(self) :
-        return '%s,%s,%s,%s,%s,%s' % (self.id,self.nombre,self.apellido1,self.apellido2,self.edad,self.usuario)
+        return f"{self.nombre} {self.apellido1} {self.apellido2}, Edad: {self.edad}"
+#return '%s,%s,%s,%s,%s,%s' % (self.id,self.nombre,self.apellido1,self.apellido2,self.edad,self.usuario)
 
 
 class Categoria(models.Model):
@@ -56,7 +59,8 @@ class Categoria(models.Model):
         ordering = ['nombre_categoria']
 
     def __str__(self):
-        return "%s,%s" % (self.id,self.nombre_categoria)
+        return self.nombre_categoria
+#return "%s,%s" % (self.id,self.nombre_categoria)
 
 class Estudio(models.Model):
         id = models.AutoField(primary_key=True)
@@ -285,3 +289,15 @@ class Tareas(models.Model):
         verbose_name_plural = "Detalles de las tareas"
     def __str__(self):
         return '%s, %s, %s' % (self.id, self.tarea, self.fecha)
+
+class Modelo(models.Model):
+    id= models.AutoField(primary_key=True)
+    asignatura = models.CharField('Asignatura', max_length=15, null=True, blank=True)
+    nota = models.DateTimeField('Nota', max_digits=5,  decimal_places=2,null=True, blank=True)
+    class Meta:
+        verbose_name = "Nota"
+        verbose_name_plural = "Notas"
+        ordering = ['-nota']  # Orden por defecto: mayor a menor
+
+    def __str__(self):
+        return f"{self.asignatura}: {self.nota}"

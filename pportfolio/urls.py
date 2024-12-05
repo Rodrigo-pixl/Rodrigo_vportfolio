@@ -76,7 +76,10 @@ path('', views.home, name='home'),
     path('editar_tarea/', views.editar_tarea, name='editar_tarea'),
     path('eliminiar_tarea/', views.eliminar_tarea, name= 'eliminar_tarea'),
     #Noticia
-    path('crear_noticia1/', views.crear_noticia1, name='crear_noticia1')
+    path('crear_noticia1/', views.crear_noticia1, name='crear_noticia1'),
+    #Nota
+path('añadir-nota/', views.añadir_nota, name='añadir_nota'),
+    path('ver-notas/', views.ver_notas, name='ver_notas'),
 
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

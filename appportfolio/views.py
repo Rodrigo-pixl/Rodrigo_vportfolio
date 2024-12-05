@@ -9,8 +9,7 @@ from multiprocessing.connection import Client
 from tempfile import template
 from time import process_time_ns
 
-
-
+from django.db.models import Model
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -805,3 +804,35 @@ def crear_noticia1(request):
         form = NoticiaForm()
 
     return render(request, 'crear_noticia1.html', {'form': form})
+
+# Añadir nota
+def añadir_nota(request):
+    if request.method == 'POST':
+        form = Model(request.POST)
+        if form.is_valid():
+            form.save()  # Guarda la nueva nota en la base de datos
+            return redirect('ver_notas')  # Redirigir al listado después de añadir
+    else:
+        form = NotaForm()
+
+    return render(request, 'añadir_nota.html', {'form': form})
+''''
+def ver_notas(request):
+    notas = Modelo.objects.all()  # Obtén todas las notas
+    media = Modelo.objects.aggregate(Avg('nota'))['nota__avg']  # Calcula la media
+    return render(request, 'ver_notas.html', {'notas': notas, 'media': media})
+'''
+
+def ver_notas(request):
+        # Obtén todas las notas del modelo
+        notas = Modelo.objects.all()
+
+        # Calcula la media de las notas
+        media = Modelo.objects.aggregate(Avg('nota'))['nota__avg']
+
+        # Si no hay notas, se puede gestionar que 'media' sea 0 o un mensaje
+        if media is None:
+            media = 0  # O el valor que desees mostrar cuando no hay notas
+
+        # Renderiza la plantilla con las notas y la media calculada
+        return render(request, 'ver_notas.html', {'notas': notas, 'media': media})

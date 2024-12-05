@@ -12,3 +12,14 @@ class NoticiaForm(forms.ModelForm):
             'contenido': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Contenido'}),
             'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+class NotaForm(forms.ModelForm):
+    class Meta:
+        model = Modelo
+        fields = ['asignatura', 'nota']
+        labels = {
+            'asignatura': 'Asignatura',
+            'nota': 'Nota',
+        }
+        widgets = {
+            'nota': forms.NumberInput(attrs={'step': '0.01'}),
+        }
