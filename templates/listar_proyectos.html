@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<title>PROYECTO</title>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+        integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+      integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+      crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+<br><br><br><br>
+  <div class="container mt-4">
+    <h1>Lista de Proyectos</h1>
+    <a href="{% url 'añadir_proyecto' %}" class="btn btn-primary mb-4">Crear Proyecto</a>
+    <ul class="list-group">
+      {% for proyecto in proyectos %}
+      <li class="list-group-item">
+        <h4>{{ proyecto.titulo }}</h4>
+        <p>{{ proyecto.lenguaje}}</p>
+        <p>{{ proyecto.observaciones}}</p>
+        <small class="text-muted">Publicado el {{ proyecto.fecha_publicacion|date:"d M Y H:i"}}</small>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% enblock content %}

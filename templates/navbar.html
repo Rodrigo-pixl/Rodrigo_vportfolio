@@ -27,8 +27,10 @@
 					<li><a href="{% url 'experiencias' %}"><font size="5" color="#0000FF">Experiencias</font> </a> </li>
 					<li><a href="{% url 'añadir_valoracion' %"><font size="5" color="#0000FF">Valorar</font></a> </li>
 					<li><a href="{% url 'listar_valoraciones' %"}><font size="5" color="#0000FF">Valoraciones</font> </a> </li>
-               		<a class="btn-sucsses" href="(% url 'register' %)" style="margin_top: 7px;" ><font size="5" color="#686868" >Registro</font></a>
-                {% endif %}
+					<li><a href="{% url 'ver_proyectos' %}"><font size="5" color="#0000FF">Proyectos</font></a></li>
+               		<li><a class="btn-sucsses" href="(% url 'register' %)" style="margin_top: 7px;" ><font size="5" color="#686868" >Registro</font></a></li>
+
+				{% endif %}
 				<!-- bloque 2 usuarios autorizados -->
 				{% if request.user.is_authenticated %}
 					<li><a href="{% url 'home' %}"><font size="5" color="#0000FF">Inicio</font></a></li>
@@ -42,7 +44,13 @@
 					<li><a href="{% url 'contacto' %}"><font size="5" color="#0000FF">Enviar email</font></a></li>
 					<li><a href="{% url 'listar_entrevistadores' %}"><font size="5" color="=#0000FF">Entrevistadores</font></a></li>
 					<li><a href="{% url 'seleccionar_entrevistadores' %}"><font size="5" color="#0000FF">Entrevistadores Chat</font> </a> </li>
-					<li><a>href="{% url 'cerrar' %}"><font size="5" color="#0000FF"> Cerrar Sesión</font></a></li>
+					<li><a href="{% url 'cerrar' %}"><font size="5" color="#0000FF"> Cerrar Sesión</font></a></li>
+					<li><a href="{% url 'añadir_proyectos' %}"><font size="5" color="#0000FF">Añadir Proyecto</font> </a></li>
+					<li><a href="{% url 'modificar_proyectos' %}"><font size="5" color="#0000FF">Modificar Proyecto</font></a></li>
+					<li><a href="{% url 'eliminar_proyectos' %}"><font size= "5" color="#0000FF">Eliminar Proyecto</font></a></li>
+					<li><a href="{% url 'listar_proyectos' %}"><font size="5" color="#0000FF">Listar Proyecto</font></a></li>
+
+
 				{% endif %}
             </ul>
 			

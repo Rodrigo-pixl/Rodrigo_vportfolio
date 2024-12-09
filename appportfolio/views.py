@@ -836,3 +836,48 @@ def ver_notas(request):
 
         # Renderiza la plantilla con las notas y la media calculada
         return render(request, 'ver_notas.html', {'notas': notas, 'media': media})
+
+# EXAMEN PROYECTO
+def ver_proyectos(request):
+    proyecto = Modelo.objects.all()
+    return (request, 'ver_proyectos.html', {'proyecto' : proyecto})
+
+
+def listar_proyectos(request):
+    proyectos = Proyecto.objects.all()
+    return render(request, 'proyectos/listar_proyectos.html',{'proyectos': proyectos})
+
+
+def agregar_proyectos(request):
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        lenguaje= request.POST.get('lenguaje')
+        tecnologias = request.POST.get('tecnologias')
+        observaciones = request.POST.get('observaciones')
+        fecha_publicacion = request.POST.get('fecha_publicacion')
+
+        proyecto = Proyecto(titulo=titulo, lenguaje=lenguaje, tecnologiad=tecnologias, observaciones=observaciones,
+                            fecha_publicacion=fecha_publicacion)
+        proyecto.save()
+        return redirect('ver_proyecto', pk=proyecto.pk)
+
+        return rende(request, 'agregar_proyectos.html')
+
+
+def editar_proyectos(request, id):
+        proyecto = get_object_or_404(Tarea, id=id)
+        if request.method == 'POST':
+            form = ProyectoForm(request.POST, instance=proyecto)
+            if form.is_valid():
+                form.save()
+                return redirect('listar_proyectos')
+        else:
+            form = ProyectoForm(instance=proyecto)
+        return render(request, 'proyectos/editar_proyecto.html',{'proyecto': proyecto})
+
+def eliminar_proyectos(request, id):
+        proyecto = get_object_or_404(Tarea, id=id)
+        if request.method == 'POST':
+            proyecto.delete()
+            return redirect('listar_proyectos')
+        return render(request, 'proyectos/eliminar_proyectos.html', {'proyecto' : proyecto})

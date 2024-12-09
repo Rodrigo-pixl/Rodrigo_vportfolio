@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<title>Detalles del Proyecto</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+      integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+      crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Detalles del Proyecto</h1>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ proyecto.titulo }}</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>Lenguaje:</strong> {{ proyecto.lenguaje }}</p>
+            <p><strong>Observaciones:</strong> {{ proyecto.observaciones }}</p>
+            <p><strong>Fecha de Publicación:</strong> {{ proyecto.fecha_publicacion|date:"d M Y H:i" }}</p>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'editar_proyecto' proyecto.id %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'proyectos' %}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

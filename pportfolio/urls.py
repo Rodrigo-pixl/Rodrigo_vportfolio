@@ -78,9 +78,14 @@ path('', views.home, name='home'),
     #Noticia
     path('crear_noticia1/', views.crear_noticia1, name='crear_noticia1'),
     #Nota
-path('añadir-nota/', views.añadir_nota, name='añadir_nota'),
+    path('añadir-nota/', views.añadir_nota, name='añadir_nota'),
     path('ver-notas/', views.ver_notas, name='ver_notas'),
-
+    #Proyecto
+    path('ver_proyectos/', views.ver_proyectos, name='ver_proyectos'),
+    path('listar_proyectos/', views.listar_proyectos, name='listar_proyectos'),
+    path('añadir_proyectos/', views.agregar_proyectos, name='añadir_proyectos'),
+    path('modificar_proyectos/', views.editar_proyectos, name='modificar_proyectos'),
+    path('eliminar_proyectos/', views.eliminar_proyectos, name='eliminar_proyectos'),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

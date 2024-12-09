@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from doctest import master
+from doctest import master, BLANKLINE_MARKER
 from idlelib.debugger_r import close_subprocess_debugger
 from math import trunc
 from pickletools import decimalnl_long
 from tkinter.ttk import Treeview
+
+from PIL.ImImagePlugin import number
 
 from appportfolio.views import estudios
 from django.db import models
@@ -293,7 +295,7 @@ class Tareas(models.Model):
 class Modelo(models.Model):
     id= models.AutoField(primary_key=True)
     asignatura = models.CharField('Asignatura', max_length=15, null=True, blank=True)
-    nota = models.DateTimeField('Nota', max_digits=5,  decimal_places=2,null=True, blank=True)
+    nota = models.BooleanField('Nota', max_digits=5,  decimal_places=2,null=True, blank=True)
     class Meta:
         verbose_name = "Nota"
         verbose_name_plural = "Notas"
@@ -301,3 +303,17 @@ class Modelo(models.Model):
 
     def __str__(self):
         return f"{self.asignatura}: {self.nota}"
+
+class Proyecto(models.Model):
+    id= models.AutoField(primary_key=True)
+    titulo = models.CharField('Titulo', max_length=15, null=True, blank=True)
+    lenguaje= models.CharField('Lenguaje', max_length=20, null=True, blank=True)
+    tecnologias = models.CharField('Tecnologias', max_length=20, null=True, blank=True )
+    observaciones = models.CharField('Observaciones', max_length=20, null=True, blank=True)
+    fecha_publicacion = models.DateTimeField('Fecha_Publicación', max_length=15, null=True, blank=True)
+
+    class Meta:
+        verbose_name="Proyecto"
+        verbose_name_plural = "Proyectos"
+    def __str__(self):
+        return f"{self.titulo}: {self.lenguaje}: {self.tecnologias}:{self.observaciones}"

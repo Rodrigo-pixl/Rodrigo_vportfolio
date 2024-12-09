@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-<title>Alta Curriculum</title>
+<title>Añadir Proyecto</title>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
         integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
@@ -15,25 +15,25 @@
 <br><br><br><br>
 <font size="3">
 
-  <h1>Agregar Curriculum</h1>
+  <h1>Agregar Proyecto</h1>
   <form method="post">
     {% csrf_token %}
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required><br>
+    <label for="titulo">Titulo:</label>
+    <input type="text" id="titulo" name="titulo" required><br>
 
-    <label for="ap1">Primer Apellido:</label>
-    <input type="text" id="ap1" name="ap1" required><br>
+    <label for="lenguaje">Lenguaje:</label>
+    <input type="text" id="lenguaje" name="lenguaje" required><br>
 
-    <label for="ap2">Segundo Apellido:</label>
-    <input type="text" id="ap2" name="ap2" required><br>
+    <label for="tecnologias">Tecnologias:</label>
+    <input type="text" id="tecnologias" name="tecnologias" required><br>
 
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" required><br>
+    <label for="observaciones">Email:</label>
+    <input type="text" id="observaciones" name="email" required><br>
 
-    <label for="telefono">Teléfono</label>
-    <input type="tel" id="telefono" name="telefono" required><br>
+    <label for="fecha_publicacion">Fecha</label>
+    <input type="date" id="fecha_publicacion" name="fecha_publicacion" required><br>
 
-    <button type="submit">Guardar Curriculum</button>
+    <button type="submit">Guardar Proyecto</button>
 
   </form>
 </font>

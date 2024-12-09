@@ -1,8 +1,8 @@
 <br><br><br><br>
-<h1>Eliminar Experiencia</h1>
-<p>¿Estás seguro de que deseas eliminar la experiencia {{ experiencia.empresa }}?</p>
+<h1>Eliminar Proyecto</h1>
+<p>¿Estás seguro de que deseas eliminar el proyecto "{{ proyecto.titulo }}"?</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-warning btn-sm">Eliminar</button>
-    <a href="{% url 'home' %}" class="btn btn-warning btn-sm">Cancelar</a>
+    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+    <a href="{% url 'proyectos' %}" class="btn btn-secondary btn-sm">Cancelar</a>
 </form>
